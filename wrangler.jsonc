@@ -5,14 +5,22 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "tool-server",
-	"main": "src/entry.py",
+	"main": "src/main.py",
 	"compatibility_date": "2026-02-05",
 	"compatibility_flags": [
-		"python_workers"
+		"python_workers",
+		"python_dedicated_snapshot"
 	],
 	"observability": {
 		"enabled": true
-	}
+	},
+	"d1_databases": [
+		{
+			"binding": "DB", // i.e. available in your Worker on env.DB
+			"database_name": "monkey", // REPLACE WITH YOUR DB NAME
+			"database_id": "c1e61754-59e9-41a0-aea4-b496e48e2b9f" // REPLACE WITH YOUR DB ID
+		}
+	]
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
