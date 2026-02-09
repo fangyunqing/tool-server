@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "tool-server",
+	"name": "tool-server-2",
 	"main": "src/main.py",
 	"compatibility_date": "2026-02-05",
 	"compatibility_flags": [
