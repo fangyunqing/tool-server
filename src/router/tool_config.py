@@ -13,6 +13,7 @@ async def search(request: Request):
         data = await env.DB.prepare(
             "SELECT item_name, item_value FROM tool_config WHERE item_name like '%price'"
         ).run()
-        return Response.json(data)
+        print(type(data))
+        return {}
     except Exception as e:
         return {"error": str(e)}
