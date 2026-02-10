@@ -32,4 +32,12 @@ CREATE TABLE IF NOT EXISTS tool_config
 CREATE INDEX IF NOT EXISTS idx_tool_order_code ON tool_order(code);
 CREATE INDEX IF NOT EXISTS idx_tool_user_code ON tool_user(code);
 
+INSERT INTO tool_config (item_name, item_value)
+VALUES ('admin_code', 'c7d540c4-ac37-7b3f-2737-11533e0a1e23');
+
+INSERT INTO tool_config (item_name, item_value)
+VALUES ('account_price', '0.2');
+
+INSERT INTO tool_config (item_name, item_value)
+VALUES ('day_price', '0.3');
 

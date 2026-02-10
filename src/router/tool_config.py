@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Request
-from workers import Response
 
 from core import CommonResult
 
@@ -11,9 +10,8 @@ async def search(request: Request):
     try:
         env = request.scope["env"]
         data = await env.DB.prepare(
-            "SELECT item_name, item_value FROM tool_config WHERE item_name like '%price'"
+            "SELECT item_name, item_value FROM tool_config"
         ).run()
-        print(type(data))
-        return {}
+        return CommonResult.success(data.to_py()["results"])
     except Exception as e:
         return {"error": str(e)}
