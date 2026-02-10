@@ -11,7 +11,7 @@ async def search(request: Request):
     try:
         env = request.scope["env"]
         data = await env.DB.prepare(
-            "SELECT tool_name, tool_value FROM tool_config WHERE item_name like '%price'"
+            "SELECT item_name, item_value FROM tool_config WHERE item_name like '%price'"
         ).run()
         return Response.json(data)
     except Exception as e:
