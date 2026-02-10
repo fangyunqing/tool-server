@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request
+from workers import Response
 
 from core import CommonResult
 
@@ -11,5 +12,5 @@ async def search(request: Request):
     data = await env.DB.prepare(
         "SELECT * FROM tool_config WHERE item_name like '%price'"
     ).run()
-    print(data.results)
+    print(Response.json(data.results))
     return CommonResult.success(data.results)
