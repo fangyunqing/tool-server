@@ -16,6 +16,10 @@ class Default(WorkerEntrypoint):
 async def global_exception_handler(request, exc):
     return CommonResult.fail(999, str(exc))
 
-app = FastAPI()
+app = FastAPI(
+    exception_handlers={
+        Exception: global_exception_handler
+    },
+)
 app.include_router(tool_order_router)
 app.include_router(tool_config_router)
