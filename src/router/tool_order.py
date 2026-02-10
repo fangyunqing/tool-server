@@ -12,4 +12,4 @@ async def search(request: Request):
         ).all()
     except Exception as e:
         return {"error": str(e)}
-    return {"env": "11", "results": results}
+    return {"env": "11", "results": "11"}
