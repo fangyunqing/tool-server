@@ -11,4 +11,5 @@ async def search(request: Request):
     data = await env.DB.prepare(
         "SELECT * FROM tool_config WHERE item_name like '%price'"
     ).run()
+    print(data.results)
     return CommonResult.success(data.results)
