@@ -6,12 +6,14 @@ CREATE TABLE IF NOT EXISTS tool_order
 (
     id INTEGER PRIMARY KEY,
     code TEXT,
+    fee TEXT,
     add_account_num INTEGER,
     add_day_num INTEGER,
     order_status INTEGER,
-    create_time TEXT,
-    pay_time TEXT,
-    finish_time TEXT
+    pay_voucher BLOB,
+    create_time TEXT DEFAULT '',
+    pay_time TEXT DEFAULT '',
+    finish_time TEXT DEFAULT ''
 );
 
 CREATE TABLE IF NOT EXISTS tool_user
@@ -40,4 +42,7 @@ VALUES ('account_price', '0.2');
 
 INSERT INTO tool_config (item_name, item_value)
 VALUES ('day_price', '0.3');
+
+INSERT INTO tool_order (code, add_account_num, add_day_num, order_status, create_time)
+VALUES ('1', 1, 1, 1, '2020-01-01 11:11:11')
 

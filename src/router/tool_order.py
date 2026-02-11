@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Request
+from core import CommonResult
 
 tool_order_router = APIRouter(prefix="/tool_order", tags=["tool_order"])
 
 
-@tool_order_router.get("/name")
-async def search(request: Request):
+@tool_order_router.get("/code/{code}")
+async def query_by_code(request: Request, code: str):
     env = request.scope["env"]
-    try:
-        results = await env.DB.prepare(
-            "SELECT * FROM tool_config"
-        ).all()
-    except Exception as e:
-        return {"error": str(e)}
-    return {"env": "11", "results": "11"}
+    smt = env.DB.prepare(
+        "SELECT * FROM tool_order WHERE code = ? LIMIT 30"
+    )
+    result = await smt.bind(code).run()
+    return CommonResult.success(result.to_py()["results"])
+
