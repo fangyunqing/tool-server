@@ -7,11 +7,14 @@ CREATE TABLE IF NOT EXISTS tool_order
     id INTEGER PRIMARY KEY,
     code TEXT,
     fee TEXT,
+    count_price TEXT,
     add_account_num INTEGER,
+    day_price TEXT,
     add_day_num INTEGER,
     order_status INTEGER,
     pay_voucher BLOB,
     create_time TEXT DEFAULT '',
+    update_time TEXT DEFAULT '',
     pay_time TEXT DEFAULT '',
     finish_time TEXT DEFAULT ''
 );
