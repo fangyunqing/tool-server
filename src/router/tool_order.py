@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Request
 from core import CommonResult
+from model import CreateToolOrderModel
 
 tool_order_router = APIRouter(prefix="/tool_order", tags=["tool_order"])
 
@@ -12,4 +13,15 @@ async def query_by_code(request: Request, code: str):
     )
     result = await smt.bind(code).run()
     return CommonResult.success(result.to_py()["results"])
+
+
+@tool_order_router.post("/add")
+async def add(request: Request, create: CreateToolOrderModel):
+    env = request.scope["env"]
+    smt = env.DB.prepare(
+        "SELECT * FROM tool_order WHERE code = ? LIMIT 30"
+    )
+    result = await smt.bind(code).run()
+    return CommonResult.success(result.to_py()["results"])
+
 

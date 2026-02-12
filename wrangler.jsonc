@@ -20,7 +20,13 @@
 			"database_name": "monkey", // REPLACE WITH YOUR DB NAME
 			"database_id": "c1e61754-59e9-41a0-aea4-b496e48e2b9f" // REPLACE WITH YOUR DB ID
 		}
-	]
+	],
+	 "r2_buckets": [
+    {
+      "binding": "MY_BUCKET", // <~ valid JavaScript variable name
+      "bucket_name": "monkey"
+    }
+  ]
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
