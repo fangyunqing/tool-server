@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class CommonResult(BaseModel):
 
-    message: str = "success"
+    message: str = "OK"
     data: Any = None
     code: int = 200
 
