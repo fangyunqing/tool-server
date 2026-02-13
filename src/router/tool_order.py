@@ -31,8 +31,8 @@ async def add(request: Request, create: CreateToolOrderModel):
         elif config.item_name == "day_price":
             real_fee += float(config.item_value) * create.add_day_num
     real_fee = round(real_fee, 2)
-    if str(real_fee) != create.fee:
-        return CommonResult.fail()
+    if real_fee != float(create.fee):
+        return CommonResult.fail("订单费用发生变化，请关闭后重新下订单")
     # 插入
     create_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     await env.DB.prepare(
