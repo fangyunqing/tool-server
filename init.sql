@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS tool_order
     id INTEGER PRIMARY KEY,
     code TEXT,
     fee TEXT,
-    count_price TEXT,
+    account_price TEXT,
     add_account_num INTEGER,
     day_price TEXT,
     add_day_num INTEGER,

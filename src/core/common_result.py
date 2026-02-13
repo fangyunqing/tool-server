@@ -2,6 +2,8 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from python_modules.typing_extensions import overload
+
 
 class CommonResult(BaseModel):
 
@@ -14,6 +16,5 @@ class CommonResult(BaseModel):
         return CommonResult(data=data).model_dump()
 
     @staticmethod
-    def fail(code: int, message: str, data: Any = None) -> dict:
+    def fail(message: str, code=999, data: Any = None) -> dict:
         return CommonResult(code=code, message=message, data=data).model_dump()
-
