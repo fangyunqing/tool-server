@@ -11,11 +11,19 @@ tool_order_router = APIRouter(prefix="/tool_order", tags=["tool_order"])
 async def query_by_code(request: Request, code: str):
     env = request.scope["env"]
     smt = env.DB.prepare(
-        "SELECT * FROM tool_order WHERE code = ? LIMIT 30"
+        "SELECT * FROM tool_order WHERE code = ? ORDER BY create_time DESC LIMIT 30"
     )
     result = await smt.bind(code).run()
     return CommonResult.success(result.to_py()["results"])
 
+@tool_order_router.get("order_status/{order_status}")
+async def query_by_order_status(request: Request, order_status: int):
+    env = request.scope["env"]
+    smt = env.DB.prepare(
+        "SELECT * FROM tool_order WHERE order_status = ? ORDER BY create_time DESC LIMIT 30"
+    )
+    result = await smt.bind(order_status).run()
+    return CommonResult.success(result.to_py()["results"])
 
 @tool_order_router.post("/add")
 async def add(request: Request, create: CreateToolOrderModel):

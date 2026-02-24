@@ -1,7 +1,7 @@
 import json
 import logging
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from workers import WorkerEntrypoint
 from core import CommonResult
@@ -40,3 +40,21 @@ async def global_exception_handler(request, exc):
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content=CommonResult.fail(str(exc)),
     )
+
+@app.middleware("auth")
+async def check_auth(request: Request, call_next):
+    if request.url.path.endswith("admin_tool_order"):
+        tool_token = request.headers["tool_token"]
+        env = request.scope["env"]
+        config_result = await env.DB.prepare(
+            "SELECT item_value FROM tool_config WHERE item_name = 'admin_code'"
+        ).run()
+        admin_code = config_result.results[0].item_value
+        if tool_token == admin_code:
+            response = await call_next(request)
+            return response
+        else:
+            return CommonResult.fail(code=401, message="Unauthorized")
+    else:
+        response = await call_next(request)
+        return response
