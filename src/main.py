@@ -7,7 +7,7 @@ from workers import WorkerEntrypoint
 from core import CommonResult
 from python_modules.starlette import status
 
-from router import tool_order_router, tool_config_router
+from router import tool_order_router, tool_config_router, login_router
 
 
 class Default(WorkerEntrypoint):
@@ -31,6 +31,7 @@ app.add_middleware(
 
 app.include_router(tool_order_router)
 app.include_router(tool_config_router)
+app.include_router(login_router)
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc):

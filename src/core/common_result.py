@@ -18,3 +18,4 @@ class CommonResult(BaseModel):
     @staticmethod
     def fail(message: str, code=999, data: Any = None) -> dict:
         return CommonResult(code=code, message=message, data=data).model_dump()
+

@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS tool_order
     day_price TEXT,
     add_day_num INTEGER,
     order_status INTEGER,
-    pay_voucher BLOB,
     create_time TEXT DEFAULT '',
     update_time TEXT DEFAULT '',
     pay_time TEXT DEFAULT '',
@@ -24,7 +23,9 @@ CREATE TABLE IF NOT EXISTS tool_user
     id INTEGER PRIMARY KEY,
     code TEXT,
     life_time TEXT,
-    create_time TEXT
+    account_num INT,
+    create_time TEXT,
+    update_time TEXT
 );
 
 CREATE TABLE IF NOT EXISTS tool_config

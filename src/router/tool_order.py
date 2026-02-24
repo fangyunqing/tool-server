@@ -47,3 +47,59 @@ async def add(request: Request, create: CreateToolOrderModel):
     return CommonResult.success()
 
 
+@tool_order_router.put("/pay/{order_id}")
+async def pay_voucher(request: Request, order_id: int):
+    env = request.scope["env"]
+    pay_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    await env.DB.prepare(
+        "UPDATE tool_order SET order_status = 2, pay_time = ? WHERE id = ?"
+    ).bind(pay_time, order_id).run()
+    return CommonResult.success()
+
+@tool_order_router.put("/confirm/{order_id}")
+async def confirm(request: Request, order_id: int):
+    env = request.scope["env"]
+    finish_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    await env.DB.prepare(
+        "UPDATE tool_order SET order_status = 3, finish_time = ? WHERE id = ?"
+    ).bind(finish_time, order_id).run()
+
+    user_result = await env.DB.prepare(
+        "SELECT B.code, B.add_account_num, B.add_day_num, A.life_time, A.account_num FROM tool_order B "
+        "LEFT JOIN tool_user A ON B.code = A.code "
+        "WHERE B.id = ?"
+    ).bind(order_id).run()
+
+    user = user_result.results[0]
+    now = datetime.datetime.now()
+    current_time = now.strftime("%Y-%m-%d %H:%M:%S")
+    if user.account_num and user.life_time:
+        current_account_num= user.account_num + user.add_account_num
+        life_time = datetime.datetime.strptime(user.life_time, '%Y-%m-%d %H:%M:%S')
+        if life_time > now:
+            current_life_time = life_time + datetime.timedelta(days=user.add_day_num)
+        else:
+            current_life_time = now + datetime.timedelta(days=user.add_day_num)
+        await (env.DB.prepare(
+            "UPDATE tool_user SET life_time = ?, account_num = ?, update_time = ? WHERE code = ?"
+        ).bind(
+            current_life_time.strftime("%Y-%m-%d %H:%M:%S"),
+            current_account_num,
+            current_time,
+            user.code)
+        ).run()
+    else:
+        current_life_time = now + datetime.timedelta(days=user.add_day_num)
+        current_account_num = user.add_account_num
+        await (env.DB.prepare(
+            "INSERT INTO tool_user(code, life_time, account_num, creat_time) VALUES (?, ?, ?, ?)"
+        ).bind(
+            user.code,
+            current_life_time.strftime("%Y-%m-%d %H:%M:%S"),
+            current_account_num,
+            current_time)
+        ).run()
+
+    return CommonResult.success()
+
+
