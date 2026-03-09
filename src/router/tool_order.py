@@ -1,7 +1,7 @@
 import datetime
 
-from fastapi import APIRouter, Request
 from core import CommonResult
+from fastapi import APIRouter, Request
 from model import CreateToolOrderModel
 
 tool_order_router = APIRouter(prefix="/tool_order", tags=["tool_order"])
@@ -10,13 +10,21 @@ tool_order_router = APIRouter(prefix="/tool_order", tags=["tool_order"])
 @tool_order_router.get("/code/{code}")
 async def query_by_code(request: Request, code: str):
     env = request.scope["env"]
-    smt = env.DB.prepare(
+    result = await env.DB.prepare(
         "SELECT * FROM tool_order WHERE code = ? ORDER BY create_time DESC LIMIT 30"
-    )
-    result = await smt.bind(code).run()
-    return CommonResult.success(result.to_py()["results"])
+    ).bind(code).run()
+    orders = result.to_py()["results"]
+    result = await env.DB.prepare(
+        "SELECT * FROM tool_user WHERE code = ?"
+    ).bind(code).run()
+    users = result.to_py()["results"]
+    if users:
+        user = users[0]
+    else:
+        user = {}
+    return CommonResult.success(data={"orders": orders, "user": user})
 
-@tool_order_router.get("order_status/{order_status}")
+@tool_order_router.get("/order_status/{order_status}")
 async def query_by_order_status(request: Request, order_status: int):
     env = request.scope["env"]
     smt = env.DB.prepare(

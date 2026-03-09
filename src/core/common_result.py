@@ -1,8 +1,7 @@
+import json
 from typing import Any
 
 from pydantic import BaseModel
-
-from python_modules.typing_extensions import overload
 
 
 class CommonResult(BaseModel):
@@ -13,9 +12,9 @@ class CommonResult(BaseModel):
 
     @staticmethod
     def success(data: Any = None) -> dict:
-        return CommonResult(data=data).model_dump()
+        return CommonResult(data=json.loads(json.dumps(data))).model_dump()
 
     @staticmethod
     def fail(message: str, code=999, data: Any = None) -> dict:
-        return CommonResult(code=code, message=message, data=data).model_dump()
+        return CommonResult(code=code, message=message, data=json.loads(json.dumps(data))).model_dump()
 

@@ -22,10 +22,10 @@ CREATE TABLE IF NOT EXISTS tool_user
 (
     id INTEGER PRIMARY KEY,
     code TEXT,
-    life_time TEXT,
+    life_time INT,
     account_num INT,
-    create_time TEXT,
-    update_time TEXT
+    create_time INT,
+    update_time INT
 );
 
 CREATE TABLE IF NOT EXISTS tool_config
